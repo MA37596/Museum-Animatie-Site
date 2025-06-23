@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museum Animatie Site</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="museum-title">Verkeersanimaties</h1>
+        </header>
+
+        <main class="main-content">
+            <div class="video-container">
+                <video id="mainVideo" class="main-video" controls autoplay muted loop>
+                    <source src="assets/Crash Animatie_muse.mp4" type="video/mp4">
+                    Je browser ondersteunt geen video afspelen.
+                </video>ik
+                <div class="video-info">
+                    <h2 id="videoTitle">Crash Animatie</h2>
+                    <p id="videoDescription">Een animatie over een verkeerscrash en de gevolgen daarvan.</p>
+                </div>
+            </div>
+
+            <div class="video-gallery">
+                <h3>Beschikbare Animaties</h3>
+                <div class="video-grid">
+                    <div class="video-thumbnail active" data-video="assets/Crash Animatie_muse.mp4" data-title="Crash Animatie" data-description="Een animatie over een verkeerscrash en de gevolgen daarvan.">
+                        <div class="thumbnail-placeholder">
+                            <span>Crash Animatie</span>
+                        </div>
+                    </div>
+                    <div class="video-thumbnail" data-video="assets/Hulpverlening Animatie_muse.mp4" data-title="Hulpverlening Animatie" data-description="Een animatie over hulpverlening na een verkeersincident.">
+                        <div class="thumbnail-placeholder">
+                            <span>Hulpverlening Animatie</span>
+                        </div>
+                    </div>
+                    <div class="video-thumbnail" data-video="assets/crash hulpverlening animatie.mp4" data-title="Crash Hulpverlening Animatie" data-description="Een animatie over hulpverlening bij een crash.">
+                        <div class="thumbnail-placeholder">
+                            <span>Crash Hulpverlening Animatie</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+        </footer>
+    </div>
+
+    <script src="assets/script.js"></script>
+</body>
+</html>
