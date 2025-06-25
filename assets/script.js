@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Arcade knop polling via HTTP
     function pollButton() {
-        fetch('http://localhost:5000/button')
+        fetch('http://127.0.0.1:5500/Museum-Animatie-Site/button')
             .then(response => response.json())
             .then(data => {
                 if (data.button === 'video1') {
