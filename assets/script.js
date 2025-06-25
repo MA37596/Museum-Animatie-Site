@@ -71,6 +71,21 @@ document.addEventListener('DOMContentLoaded', function() {
                     mainVideo.pause();
                 }
                 break;
+            case 'z':
+            case 'Z':
+                e.preventDefault();
+                if (videoThumbnails[0]) videoThumbnails[0].click();
+                break;
+            case 'x':
+            case 'X':
+                e.preventDefault();
+                if (videoThumbnails[1]) videoThumbnails[1].click();
+                break;
+            case 'c':
+            case 'C':
+                e.preventDefault();
+                if (videoThumbnails[2]) videoThumbnails[2].click();
+                break;
         }
     });
 

@@ -126,6 +126,24 @@ body {
     color: white;
 }
 
+.video-thumbnail:nth-child(1) {
+    background: #ff4d4d; /* rood */
+    border-color: #ff4d4d;
+    color: white;
+}
+
+.video-thumbnail:nth-child(2) {
+    background: #ffe066; /* geel */
+    border-color: #ffe066;
+    color: #333;
+}
+
+.video-thumbnail:nth-child(3) {
+    background: #51cf66; /* groen */
+    border-color: #51cf66;
+    color: white;
+}
+
 .thumbnail-placeholder {
     height: 120px;
     display: flex;
