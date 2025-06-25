@@ -1,58 +1,59 @@
-from gpiozero import Button
-from http.server import BaseHTTPRequestHandler, HTTPServer
-import json
+#!/usr/bin/env python3
+import RPi.GPIO as GPIO
 import time
-import os
+from evdev import UInput, ecodes as e
 
-# Zorg ervoor dat we root-rechten hebben voor GPIO
-if os.geteuid() != 0:
-    print("Dit script moet met sudo worden uitgevoerd!")
-    print("Probeer: sudo python3 arcade_buttons_server.py")
-    exit(1)
+# ==================================================
+# CONFIGURATIE
+# ==================================================
+BUTTON_PIN_Z = 17  # GPIO17 -> Z
+BUTTON_PIN_X = 27  # GPIO27 -> X
+BUTTON_PIN_C = 22  # GPIO22 -> C
+DEBOUNCE_DELAY = 0.2  # Seconde vertraging na druk
 
-# GPIO pins voor de knoppen
-button1 = Button(17, pull_up=True)
-button2 = Button(27, pull_up=True)
-button3 = Button(22, pull_up=True)
+# ==================================================
+# GPIO INSTELLEN
+# ==================================================
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(BUTTON_PIN_Z, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(BUTTON_PIN_X, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(BUTTON_PIN_C, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-class RequestHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        if self.path == '/button':
-            try:
-                if button1.is_pressed:
-                    button = 'video1'
-                elif button2.is_pressed:
-                    button = 'video2'
-                elif button3.is_pressed:
-                    button = 'video3'
-                else:
-                    button = None
+# ==================================================
+# MAIN LOOP
+# ==================================================
+try:
+    with UInput({e.EV_KEY: [e.KEY_Z, e.KEY_X, e.KEY_C]}, name="RaspberryPi Arcade Buttons") as ui:
+        print("Klaar! Druk op de knoppen (Z/X/C)... (CTRL+C om te stoppen)")
 
-                self.send_response(200)
-                self.send_header('Content-type', 'application/json')
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.end_headers()
-                self.wfile.write(json.dumps({'button': button}).encode())
-            except Exception as e:
-                print(f"GPIO leesfout: {e}")
-                self.send_response(500)
-                self.end_headers()
-        else:
-            self.send_response(404)
-            self.end_headers()
+        while True:
+            # Z knop
+            if GPIO.input(BUTTON_PIN_Z) == GPIO.LOW:
+                ui.write(e.EV_KEY, e.KEY_Z, 1)  # key down
+                ui.syn()
+                ui.write(e.EV_KEY, e.KEY_Z, 0)  # key up
+                ui.syn()
+                time.sleep(DEBOUNCE_DELAY)
 
-def run(server_class=HTTPServer, handler_class=RequestHandler, port=5000):
-    server_address = ('', port)
-    httpd = server_class(server_address, handler_class)
-    print(f'Starting HTTP server on port {port}...')
-    try:
-        httpd.serve_forever()
-    except KeyboardInterrupt:
-        pass
-    finally:
-        httpd.server_close()
-        print('Server stopped.')
+            # X knop
+            if GPIO.input(BUTTON_PIN_X) == GPIO.LOW:
+                ui.write(e.EV_KEY, e.KEY_X, 1)  # key down
+                ui.syn()
+                ui.write(e.EV_KEY, e.KEY_X, 0)  # key up
+                ui.syn()
+                time.sleep(DEBOUNCE_DELAY)
 
-if __name__ == '__main__':
-    print('Server starting... Press Ctrl+C to stop.')
-    run()
+            # C knop
+            if GPIO.input(BUTTON_PIN_C) == GPIO.LOW:
+                ui.write(e.EV_KEY, e.KEY_C, 1)  # key down
+                ui.syn()
+                ui.write(e.EV_KEY, e.KEY_C, 0)  # key up
+                ui.syn()
+                time.sleep(DEBOUNCE_DELAY)
+
+            time.sleep(0.01)
+
+except KeyboardInterrupt:
+    print("\nStoppen... GPIO schoonmaken.")
+finally:
+    GPIO.cleanup()
