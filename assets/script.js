@@ -1,16 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
     const mainVideo = document.getElementById('mainVideo');
-    const videoTitle = document.getElementById('videoTitle');
-    const videoDescription = document.getElementById('videoDescription');
     const videoThumbnails = document.querySelectorAll('.video-thumbnail');
 
-    function switchVideo(videoSrc, title, description) {
+    function switchVideo(videoSrc) {
         mainVideo.style.opacity = '0';
         
         setTimeout(() => {
             mainVideo.src = videoSrc;
-            videoTitle.textContent = title;
-            videoDescription.textContent = description;
             mainVideo.style.opacity = '1';
             mainVideo.play().catch(e => {
                 console.log('Video autoplay niet toegestaan:', e);
@@ -21,29 +17,17 @@ document.addEventListener('DOMContentLoaded', function() {
     videoThumbnails.forEach(thumbnail => {
         thumbnail.addEventListener('click', function() {
             const videoSrc = this.getAttribute('data-video');
-            const title = this.getAttribute('data-title');
-            const description = this.getAttribute('data-description');
-
+            
             videoThumbnails.forEach(thumb => thumb.classList.remove('active'));
             
             this.classList.add('active');
 
-            switchVideo(videoSrc, title, description);
+            switchVideo(videoSrc);
         });
-    });
-
-    mainVideo.addEventListener('loadstart', function() {
-        console.log('Video laden gestart');
-    });
-
-    mainVideo.addEventListener('canplay', function() {
-        console.log('Video kan afgespeeld worden');
     });
 
     mainVideo.addEventListener('error', function(e) {
         console.error('Video fout:', e);
-        videoTitle.textContent = 'Video niet beschikbaar';
-        videoDescription.textContent = 'Deze video kon niet geladen worden. Controleer of het bestand bestaat.';
     });
 
     document.addEventListener('keydown', function(e) {
@@ -136,24 +120,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     preloadVideos();
-    videoThumbnails.forEach(thumbnail => {
-        thumbnail.addEventListener('click', function() {
-            const videoContainer = document.querySelector('.video-container');
-            videoContainer.scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'start'
-            });
-        });
-    });
     console.log('Museum Animatie Site geladen en klaar voor gebruik!');
 
     // Arcade knop polling via HTTP
     function pollButton() {
-<<<<<<< HEAD
-        fetch('http://localhost:5000/button') 
-=======
-        fetch('http://127.0.0.1:5500/Museum-Animatie-Site/button')
->>>>>>> 96c75a5a12fb33002f8e303cf2004364e1f4b689
+        fetch('http://localhost:5000/button')
             .then(response => response.json())
             .then(data => {
                 if (data.button === 'video1') {
